@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     int sum;
     bool pause = false, finish = false;
-    float x, y, z;
+    float x, z;
     //public Text Toto;
     private List<GameObject> Apple;
     public GameObject snake1, snake2, apple;
@@ -20,10 +20,15 @@ public class GameManager : MonoBehaviour
         sum = 0;
 
         Apple = new List<GameObject>();
-        foreach (GameObject app in GameObject.FindGameObjectsWithTag("Apple"))
-        {
-            Apple.Add(app);
-        }
+        //Apple.Add(Instantiate(apple) as GameObject);
+        //Toto.gameObject.SetActive(false);
+        //Apple[0].SetActive(false);
+
+        snake1.transform.position = new Vector3(Random.Range(-1, 1), 0.05f, Random.Range(-1, 1));
+        //do
+        //{
+        //    snake2.transform.position = new Vector3(Random.Range(-1, 1), 0.05f, Random.Range(-1, 1));
+        //} while (snake1.transform.position == snake2.transform.position);
 
     }
 
@@ -37,7 +42,7 @@ public class GameManager : MonoBehaviour
         {
             //Toto.gameObject.SetActive(true);
             //Toto.text = "Reseting...";
-            SceneManager.LoadScene("Scene");
+            SceneManager.LoadScene("Game");
 
         }
         if (Input.GetKeyUp(KeyCode.P) && !finish)
@@ -45,7 +50,7 @@ public class GameManager : MonoBehaviour
             //Toto.gameObject.SetActive(!Toto.gameObject.activeSelf);
             //Toto.text = "Paused";
             snake1.GetComponent<Snake>().enabled = !snake1.GetComponent<Snake>().enabled;
-            //snake2.GetComponent<Snake>().enabled = !snake2.GetComponent<Snake>().enabled;
+            snake2.GetComponent<Snake>().enabled = !snake2.GetComponent<Snake>().enabled;
             pause = !pause;
 
         }
@@ -57,18 +62,16 @@ public class GameManager : MonoBehaviour
         {
             if (!Apple[i].gameObject.activeSelf)
             {
-                x = Random.Range(-150f, 150f);
-                y = Random.Range(-150f, 150f);
-                z = Random.Range(-150f, 150f);
-                while (inPos(x, y, z))// || inApplePos(Apple[i]))
+                x = Random.Range(-1.9f, 1.9f);
+                z = Random.Range(-1.9f, 1.9f);
+                while (inPos(x, z))// || inApplePos(Apple[i]))
                 {
-                    x = Random.Range(-150f, 150f);
-                    y = Random.Range(-150f, 150f);
-                    z = Random.Range(-150f, 150f);
+                    x = Random.Range(-1.9f, 1.9f);
+                    z = Random.Range(-1.9f, 1.9f);
                 }
 
                 Apple[i].SetActive(true);
-                Apple[i].transform.position = new Vector3(x, y, z);
+                Apple[i].transform.position = new Vector3(x, 0.06f, z);
             }
         }
         bool SM1 = snake1.GetComponent<PlayerMovement>().enabled;//, SM2 = snake2.GetComponent<Snake>().enabled;
@@ -97,9 +100,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool inPos(float x, float y, float z)
+    public bool inPos(float x, float z)
     {
-        if (snake1.activeSelf && snake1.transform.position.x == x && snake1.transform.position.z == z && snake1.transform.position.y == y)
+        if (snake1.activeSelf && snake1.transform.position.x == x && snake1.transform.position.z == z)
             return true;
 
 
@@ -107,7 +110,7 @@ public class GameManager : MonoBehaviour
         //    return true;
         foreach (GameObject ob in GameObject.FindGameObjectsWithTag("Body1"))
         {
-            if (ob.transform.position.x == x && ob.transform.position.y == y && ob.transform.position.z == z)
+            if (ob.transform.position.x == x && ob.transform.position.z == z)
                 return true;
         }
         //foreach (GameObject ob in GameObject.FindGameObjectsWithTag("Body2"))
@@ -119,7 +122,7 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    private bool inApplePos(GameObject ap)
+    /*private bool inApplePos(GameObject ap)
     {
         for (int i = 0; i < Apple.Count; i++)
         {
@@ -127,5 +130,5 @@ public class GameManager : MonoBehaviour
                 return true;
         }
         return false;
-    }
+    }*/
 }
